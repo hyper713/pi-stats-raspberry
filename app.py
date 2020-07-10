@@ -1,13 +1,22 @@
 import Adafruit_DHT
+import requests
 import time
- 
-DHT_SENSOR = Adafruit_DHT.DHT11
-DHT_PIN = 4
- 
+
+DHT_SENSOR = Adafruit_DHT.DHT22
+DHT_PIN = 3
+host = 'http://server-ip/input'
+app_key = "Wd8TrB3G36gf7pf"
+
 while True:
     humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
+    raspberry_time = time.strftime("%Y-%m-%d %H:%M:%S")
+
     if humidity is not None and temperature is not None:
-        print("Temp={0:0.1f}C Humidity={1:0.1f}%".format(temperature, humidity))
+        r = requests.post(host, json={"temp": str(round(temperature, 1)), "rh": str(
+            round(humidity, 1)), "time": str(raspberry_time), "key": str(app_key)})
+        print(r.json()["msg"])
+        time.sleep(60)
     else:
-        print("Sensor failure. Check wiring.");
-    time.sleep(5);
+        r = requests.post(host, json={
+                          "temp": "-", "rh": "-", "time": str(raspberry_time), "key": str(app_key)})
+        print(r.json()["msg"])
