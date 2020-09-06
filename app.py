@@ -4,7 +4,7 @@ import time
 from requests import exceptions
 
 DHT_SENSOR = Adafruit_DHT.DHT22
-DHT_PIN = 3
+DHT_PIN = 4
 host = 'http://server-ip/input'
 app_key = "Wd8TrB3G36gf7pf"
 
